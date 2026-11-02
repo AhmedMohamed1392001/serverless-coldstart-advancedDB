@@ -1,0 +1,9 @@
+data/
+__pycache__/
+*.pyc
+.pytest_cache/
+native/libduckdb/
+native/forkbench
+native/coldbench
+native/density
+native/pool

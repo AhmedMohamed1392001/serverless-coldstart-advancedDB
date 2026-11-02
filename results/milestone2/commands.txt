@@ -1,0 +1,10 @@
+make test
+make data SCALE=0.1
+with_sysmon results/milestone2/native-sf0.1 python3 native/bench_native.py --scale 0.1 --out results/milestone2/native-sf0.1
+python3 native/plot_native.py results/milestone2/native-sf0.1
+make data SCALE=1
+with_sysmon results/milestone2/native-sf1 python3 native/bench_native.py --scale 1 --out results/milestone2/native-sf1 --p99
+python3 native/plot_native.py results/milestone2/native-sf1
+with_sysmon results/milestone2/pool-synthetic python3 native/pool_replay.py --scale 1 --rate 200 --seconds 30 --out results/milestone2/pool-synthetic
+with_sysmon results/milestone2/pool-azure-busiest python3 native/pool_replay.py --scale 1 --rate 200 --azure-window 3600 --azure-pick busiest --azure-compress 72 --azure /home/ahmed/AzureFunctionsInvocationTraceForTwoWeeksJan2021.txt --out results/milestone2/pool-azure-busiest
+with_sysmon results/milestone2/pool-azure-quietest python3 native/pool_replay.py --scale 1 --rate 200 --azure-window 3600 --azure-pick quietest --azure-compress 72 --azure /home/ahmed/AzureFunctionsInvocationTraceForTwoWeeksJan2021.txt --out results/milestone2/pool-azure-quietest

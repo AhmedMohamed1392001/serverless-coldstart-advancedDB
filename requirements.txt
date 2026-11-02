@@ -1,0 +1,7 @@
+duckdb==1.5.6
+pyarrow>=17
+pandas>=2.2
+numpy>=1.26
+matplotlib>=3.8
+pytest>=8
+tpchgen-cli>=1.0

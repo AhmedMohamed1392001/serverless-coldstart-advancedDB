@@ -1,0 +1,35 @@
+{
+  "cpu": "AMD Ryzen 9 8945HX with Radeon Graphics",
+  "cpus": 16,
+  "kernel": "6.6.114.1-microsoft-standard-WSL2",
+  "node": "Ahmed",
+  "duckdb": "1.5.6",
+  "git": "a5fb88cfb61e2faa517e72b3229f740711de33d2",
+  "time": "2026-11-02T00:17:48",
+  "clock_mono_ns": 10216806822779,
+  "clock_wall": 1793567868.981378,
+  "argv": [
+    "native/bench_native.py",
+    "--scale",
+    "0.1",
+    "--out",
+    "results/milestone2/native-sf0.1"
+  ],
+  "args": {
+    "scale": 0.1,
+    "blocks": 3,
+    "reps": 20,
+    "conc": [
+      1,
+      8,
+      32
+    ],
+    "quick": false,
+    "p99": false,
+    "p99_only": null,
+    "density_only": null,
+    "procs_max": 8,
+    "out": "results/milestone2/native-sf0.1"
+  },
+  "scale": 0.1
+}
