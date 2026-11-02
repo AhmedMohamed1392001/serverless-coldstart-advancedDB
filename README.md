@@ -414,6 +414,4 @@ model.
 ## Note on AI use
 
 AI was used in this project to search for references and to paraphrase or
-improve the writing. I ran every experiment myself on my laptop. I read and tested the code (the 16 pytest
-tests pass, see run.log) and checked the numbers in this README against the
-raw logs and summaries in results/milestone2.
+improve the writing. I ran every experiment myself on my laptop.
