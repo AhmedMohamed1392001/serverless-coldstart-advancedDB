@@ -34,6 +34,14 @@ static long long now_ns(void) {
     struct timespec ts; clock_gettime(CLOCK_MONOTONIC, &ts);
     return (long long)ts.tv_sec * 1000000000LL + ts.tv_nsec;
 }
+/* fork copies only the calling thread, so refuse to fork from a template
+ * that has more than one. Reads the kernel's own count. */
+static int thread_count(void) {
+    FILE *f = fopen("/proc/self/status", "r"); if (!f) return -1;
+    char line[256]; int n = -1;
+    while (fgets(line, sizeof line, f)) if (!strncmp(line, "Threads:", 8)) { n = atoi(line + 8); break; }
+    fclose(f); return n;
+}
 static long smaps_kb_of(pid_t pid, const char *key) {
     char path[64]; snprintf(path, sizeof path, "/proc/%d/smaps_rollup", pid);
     FILE *f = fopen(path, "r"); if (!f) return -1;
@@ -168,6 +176,7 @@ int main(int argc, char **argv) {
     int clone = !strcmp(IMPL, "clone");
     duckdb_database db = NULL; duckdb_connection c0 = NULL;
     if (clone) { db = open_engine(1); c0 = setup(db, dir, QUERY); }
+    if (clone && thread_count() != 1) { fprintf(stderr, "template has more than one thread, refusing to fork\n"); return 1; }
 
     pid_t pids[N]; int go[N][2], done[N][2];
     for (int i = 0; i < N; i++) {

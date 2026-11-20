@@ -39,6 +39,14 @@ static long smaps_kb(const char *key) {
     while (fgets(line, sizeof line, f)) if (!strncmp(line, key, k)) { v = atol(line + k); break; }
     fclose(f); return v;
 }
+/* fork copies only the calling thread, so refuse to fork from a template
+ * that has more than one. Reads the kernel's own count. */
+static int thread_count(void) {
+    FILE *f = fopen("/proc/self/status", "r"); if (!f) return -1;
+    char line[256]; int n = -1;
+    while (fgets(line, sizeof line, f)) if (!strncmp(line, "Threads:", 8)) { n = atoi(line + 8); break; }
+    fclose(f); return n;
+}
 static void die(const char *w) { fprintf(stderr, "error: %s\n", w); exit(1); }
 
 static void run(duckdb_connection con, const char *sql) {
@@ -250,6 +258,7 @@ int main(int argc, char **argv) {
     duckdb_connection c0; duckdb_connect(db, &c0);
     build_catalog(c0, dir, CATALOG);
     if (selective) warm_metadata(c0, dir);
+    if (thread_count() != 1) die("template has more than one thread, refusing to fork");
     printf("{\"mode\":\"template_build\",\"query\":\"%s\",\"catalog\":%d,\"build_us\":%.1f,\"rss_kb\":%ld,\"private_dirty_kb\":%ld}\n",
            QUERY, CATALOG, (now_ns() - tb) / 1e3, smaps_kb("Rss:"), smaps_kb("Private_Dirty:"));
     fflush(stdout);

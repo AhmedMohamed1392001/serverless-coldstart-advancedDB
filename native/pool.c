@@ -60,6 +60,14 @@ static long smaps_kb(const char *key) {
     while (fgets(line, sizeof line, f)) if (!strncmp(line, key, k)) { v = atol(line + k); break; }
     fclose(f); return v;
 }
+/* fork copies only the calling thread, so refuse to fork from a template
+ * that has more than one. Reads the kernel's own count. */
+static int thread_count(void) {
+    FILE *f = fopen("/proc/self/status", "r"); if (!f) return -1;
+    char line[256]; int n = -1;
+    while (fgets(line, sizeof line, f)) if (!strncmp(line, "Threads:", 8)) { n = atoi(line + 8); break; }
+    fclose(f); return n;
+}
 static void die(const char *w) { fprintf(stderr, "error: %s\n", w); exit(1); }
 static void run(duckdb_connection con, const char *sql) {
     duckdb_result r;
@@ -117,6 +125,7 @@ static void spawner_main(const char *dir, int sock) {
     }
     run(c0, query_sql(QUERY));
     long tkb = smaps_kb("Private_Dirty:"); int nspawn = 0;
+    if (thread_count() != 1) die("template has more than one thread, refusing to fork");
     spawn_req q;
     for (;;) {
         /* spin on the socket instead of sleeping in read(). On WSL2 a wakeup

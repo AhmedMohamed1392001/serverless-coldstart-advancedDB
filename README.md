@@ -125,7 +125,8 @@ reads /proc/self/stat, /proc/self/smaps_rollup and getrusage for itself.
 DuckDB settings in coldbench.c and pool.c are threads=1 (so there are no
 background threads at fork time), memory_limit 512MB and
 enable_object_cache true. density.c uses memory_limit 2GB, and in the threads
-case one engine with N threads.
+case one engine with N threads. Before the first fork, each template reads its
+thread count from /proc/self/status and refuses to fork unless it is 1.
 
 Data is TPC-H SF 0.1 and SF 1 as Parquet, each table a view over
 read_parquet. The queries are a point lookup on nation, a count on region, a
