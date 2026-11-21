@@ -23,6 +23,7 @@ experiments themselves and needs a Linux machine with gcc.
 | `tools/paper_figures.py` | Redraws Figures 4 to 9 |
 | `run_benchmarks.sh`, `Makefile` | One command for everything, and one target per experiment |
 | `results/milestone2/` | The raw measurements behind the paper (see below) |
+| `LICENSE` | MIT license for the code and the measurements |
 
 Figures 1 to 3 are drawings of the design and contain no measurements.
 
