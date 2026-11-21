@@ -4,6 +4,10 @@ This is the code for my database course project, "Towards Sub-Millisecond
 Cold-Start for Serverless Vectorized OLAP". It is the final version for
 milestone 2. The repo has the benchmark code, the one-command runner, the raw
 traces and the plots, so every number below can be checked and reproduced.
+It is also the artifact for the paper "Sub-Millisecond Cold Starts for
+Serverless Analytics". ARTIFACT.md explains how to check every table and
+figure of the paper against the raw data and how to rerun the experiments,
+and CHANGELOG.md lists what changed between versions.
 
 ## The idea
 
